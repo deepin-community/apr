@@ -1,3 +1,38 @@
+apr (1.7.2-3) unstable; urgency=medium
+
+  * Add more fixes for atomics from upstream, in particular for
+    32 bit archs with weak memory ordering.
+
+ -- Stefan Fritsch <sf@debian.org>  Sun, 26 Feb 2023 21:51:24 +0100
+
+apr (1.7.2-2) unstable; urgency=medium
+
+  * Fix 64bit atomics on powerpc and armel.
+  * Bump standards version (no changes).
+
+ -- Stefan Fritsch <sf@debian.org>  Sat, 04 Feb 2023 12:08:53 +0100
+
+apr (1.7.2-1) unstable; urgency=medium
+
+  [ Stefan Fritsch ]
+  * New upstream version
+    - CVE-2022-24963: Integer Overflow or Wraparound vulnerability
+      in apr_encode functions
+  * Include PrintPath in libapr1-dev.
+
+  [ Debian Janitor ]
+  * Bump debhelper from old 12 to 13.
+  * Re-export upstream signing key without extra signatures.
+  * Remove constraints unnecessary since buster:
+    + Build-Depends: Drop versioned constraint on libtool.
+
+  [ Yadd ]
+  * Bump standards version
+  * Modernize debian/watch
+  * Add "Rules-Requires-Root: no"
+
+ -- Stefan Fritsch <sf@debian.org>  Thu, 02 Feb 2023 23:55:35 +0100
+
 apr (1.7.0-8) unstable; urgency=medium
 
   * Team upload
