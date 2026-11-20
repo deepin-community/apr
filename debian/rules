@@ -159,6 +159,22 @@ override_dh_auto_install:
 		exit 1 ; \
 	fi
 
+	# Guard against a stale build environment: if -lcrypt resolves to a
+	# libcrypt whose SONAME is not the one provided by libcrypt1 (sw64 used
+	# to ship libcrypt.so.1.1), the installed library carries a DT_NEEDED
+	# entry that cannot be resolved at run time:
+	#   error while loading shared libraries: libcrypt.so.1.1: cannot open
+	#   shared object file
+	# Fail the build instead of publishing a library that cannot be loaded.
+	for f in $$(find debian/tmp -type f -name '*.so*'); do \
+		if readelf -d $$f 2>/dev/null | grep -q 'NEEDED.*libcrypt\.so\.1\.1'; then \
+			echo "ERROR: $$f has a DT_NEEDED entry for libcrypt.so.1.1." >&2; \
+			echo "ERROR: The build environment provides a stale libcrypt." >&2; \
+			echo "ERROR: Check libcrypt-dev and rebuild." >&2; \
+			exit 1; \
+		fi; \
+	done
+
 override_dh_strip:
 	dh_strip --dbgsym-migration='libapr1-dbg (<< 1.7.0-4~)'
 

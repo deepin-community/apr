@@ -1,3 +1,21 @@
+apr (1.7.2-3deepin1) unstable; urgency=medium
+
+  * Rebuild so that the apr library links against the libcrypt provided by
+    libcrypt-dev, fixing a sw64 runtime breakage
+    - Add libcrypt-dev to Build-Depends: configure runs
+      AC_SEARCH_LIBS(crypt, crypt ufc) and adds -lcrypt to LIBS, so the
+      installed library inherits the SONAME of whatever libcrypt the build
+      environment provides. On sw64 that used to be a libcrypt with SONAME
+      libcrypt.so.1.1, so the old binary carried DT_NEEDED libcrypt.so.1.1
+    - No package provides libcrypt.so.1.1, so every APR consumer failed at
+      run time; e.g. logresolve exited with 127 and "error while loading
+      shared libraries: libcrypt.so.1.1: cannot open shared object file"
+    - Add a post-install check that fails the build if an installed library
+      still declares libcrypt.so.1.1, so a stale build environment cannot
+      silently produce an unloadable package again
+
+ -- lichenggang <lichenggang@uniontech.com>  Fri, 20 Nov 2026 15:34:28 +0800
+
 apr (1.7.2-3) unstable; urgency=medium
 
   * Add more fixes for atomics from upstream, in particular for
