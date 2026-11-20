@@ -10,6 +10,7 @@ Build-Depends: debhelper-compat (= 13),
  doxygen,
  netbase <!nocheck>,
  net-tools <!nocheck>,
+ libcrypt-dev,
  libtool,
  python3:any,
  libsctp-dev [linux-any]
